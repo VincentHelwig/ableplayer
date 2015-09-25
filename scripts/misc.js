@@ -1,10 +1,10 @@
 (function ($) {
-  AblePlayer.prototype.countProperties = function(obj) { 
-    // returns the number of properties in an object 
-    var count, prop; 
+  AblePlayer.prototype.countProperties = function(obj) {
+    // returns the number of properties in an object
+    var count, prop;
     count = 0;
     for (prop in obj) {
-      if (obj.hasOwnProperty(prop)) { 
+      if (obj.hasOwnProperty(prop)) {
         ++count;
       }
     }
@@ -15,7 +15,7 @@
   AblePlayer.prototype.formatSecondsAsColonTime = function (seconds) {
     var dMinutes = Math.floor(seconds / 60);
     var dSeconds = Math.floor(seconds % 60);
-    if (dSeconds < 10) { 
+    if (dSeconds < 10) {
       dSeconds = '0' + dSeconds;
     }
 

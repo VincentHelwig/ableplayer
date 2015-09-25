@@ -6,8 +6,8 @@
     }
   };
 
-  AblePlayer.prototype.showMeta = function(now) { 
-    var m, thisMeta, cues; 
+  AblePlayer.prototype.showMeta = function(now) {
+    var m, thisMeta, cues;
     if (this.meta.length >= 1) {
       cues = this.meta;
     }
@@ -15,22 +15,22 @@
       cues = [];
     }
     for (m in cues) {
-      if ((cues[m].start <= now) && (cues[m].end > now)) {      
+      if ((cues[m].start <= now) && (cues[m].end > now)) {
         thisMeta = m;
         break;
       }
     }
-    if (typeof thisMeta !== 'undefined') {  
-      if (this.currentMeta !== thisMeta) { 
-        // it's time to load the new metadata cue into the container div 
+    if (typeof thisMeta !== 'undefined') {
+      if (this.currentMeta !== thisMeta) {
+        // it's time to load the new metadata cue into the container div
         this.$metaDiv.html(this.flattenCueForMeta(cues[thisMeta]).replace('\n', '<br>'));
         this.currentMeta = thisMeta;
-      } 
+      }
     }
-    else {     
+    else {
       this.$metaDiv.html('');
       this.currentMeta = -1;
-    } 
+    }
   };
 
   // Takes a cue and returns the metadata text to display for it.
@@ -55,11 +55,11 @@
       }
       return result.join('');
     }
-    
+
     for (var ii in cue.components.children) {
       result.push(flattenComponent(cue.components.children[ii]));
     }
-    
+
     return result.join('');
   };
 

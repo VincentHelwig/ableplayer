@@ -1,6 +1,6 @@
 (function ($) {
-  AblePlayer.prototype.updateCaption = function (time) {   
-    if (!this.usingYouTubeCaptions) {     
+  AblePlayer.prototype.updateCaption = function (time) {
+    if (!this.usingYouTubeCaptions) {
       if (this.captionsOn) {
         this.$captionDiv.show();
         this.showCaptions(time || this.getElapsed());
@@ -18,20 +18,20 @@
       thisObj.selectedCaptions = track;
       thisObj.captionLang = track.language;
       thisObj.currentCaption = -1;
-      if (thisObj.usingYouTubeCaptions) { 
-        if (thisObj.captionsOn) { 
-          // captions are already on. Just need to change the language 
-          thisObj.youTubePlayer.setOption(thisObj.ytCaptionModule, 'track', {'languageCode': thisObj.captionLang}); 
+      if (thisObj.usingYouTubeCaptions) {
+        if (thisObj.captionsOn) {
+          // captions are already on. Just need to change the language
+          thisObj.youTubePlayer.setOption(thisObj.ytCaptionModule, 'track', {'languageCode': thisObj.captionLang});
         }
-        else { 
-          // captions are off (i.e., captions module has been unloaded; need to reload it) 
-          // user's selected language will be reset after module has successfully loaded 
-          // (the onApiChange event will be fired -- see initialize.js > initYouTubePlayer())  
-          thisObj.resettingYouTubeCaptions = true; 
+        else {
+          // captions are off (i.e., captions module has been unloaded; need to reload it)
+          // user's selected language will be reset after module has successfully loaded
+          // (the onApiChange event will be fired -- see initialize.js > initYouTubePlayer())
+          thisObj.resettingYouTubeCaptions = true;
           thisObj.youTubePlayer.loadModule(thisObj.ytCaptionModule);
-        }        
+        }
       }
-      else { 
+      else {
         // Try and find a matching description track for rebuilding transcript
         for (var ii in thisObj.descriptions) {
           if (thisObj.descriptions[ii].language === track.language) {
@@ -45,11 +45,11 @@
       thisObj.captionsOn = true;
       // stopgap to prevent spacebar in Firefox from reopening popup
       // immediately after closing it (used in handleCaptionToggle())
-      thisObj.hidingPopup = true; 
+      thisObj.hidingPopup = true;
       thisObj.captionsPopup.hide();
-      // Ensure stopgap gets cancelled if handleCaptionToggle() isn't called 
-      // e.g., if user triggered button with Enter or mouse click, not spacebar 
-      setTimeout(function() { 
+      // Ensure stopgap gets cancelled if handleCaptionToggle() isn't called
+      // e.g., if user triggered button with Enter or mouse click, not spacebar
+      setTimeout(function() {
         thisObj.hidingPopup = false;
       }, 100);
       thisObj.$ccButton.focus();
@@ -61,18 +61,18 @@
   AblePlayer.prototype.getCaptionOffFunction = function () {
     var thisObj = this;
     return function () {
-      if (thisObj.player == 'youtube') { 
+      if (thisObj.player == 'youtube') {
         thisObj.youTubePlayer.unloadModule(thisObj.ytCaptionModule);
       }
       thisObj.captionsOn = false;
       thisObj.currentCaption = -1;
       // stopgap to prevent spacebar in Firefox from reopening popup
       // immediately after closing it (used in handleCaptionToggle())
-      thisObj.hidingPopup = true; 
+      thisObj.hidingPopup = true;
       thisObj.captionsPopup.hide();
-      // Ensure stopgap gets cancelled if handleCaptionToggle() isn't called 
-      // e.g., if user triggered button with Enter or mouse click, not spacebar 
-      setTimeout(function() { 
+      // Ensure stopgap gets cancelled if handleCaptionToggle() isn't called
+      // e.g., if user triggered button with Enter or mouse click, not spacebar
+      setTimeout(function() {
         thisObj.hidingPopup = false;
       }, 100);
       thisObj.$ccButton.focus();
@@ -81,8 +81,8 @@
     }
   };
 
-  AblePlayer.prototype.showCaptions = function(now) { 
-    var c, thisCaption; 
+  AblePlayer.prototype.showCaptions = function(now) {
+    var c, thisCaption;
     var cues;
     if (this.selectedCaptions) {
       cues = this.selectedCaptions.cues;
@@ -94,22 +94,22 @@
       cues = [];
     }
     for (c in cues) {
-      if ((cues[c].start <= now) && (cues[c].end > now)) {      
+      if ((cues[c].start <= now) && (cues[c].end > now)) {
         thisCaption = c;
         break;
       }
     }
-    if (typeof thisCaption !== 'undefined') {  
-      if (this.currentCaption !== thisCaption) { 
-        // it's time to load the new caption into the container div 
+    if (typeof thisCaption !== 'undefined') {
+      if (this.currentCaption !== thisCaption) {
+        // it's time to load the new caption into the container div
         this.$captionDiv.html(this.flattenCueForCaption(cues[thisCaption]).replace('\n', '<br>'));
         this.currentCaption = thisCaption;
-      } 
+      }
     }
-    else {     
+    else {
       this.$captionDiv.html('');
       this.currentCaption = -1;
-    } 
+    }
   };
 
   // Takes a cue and returns the caption text to display for it.
@@ -134,11 +134,11 @@
       }
       return result.join('');
     }
-    
+
     for (var ii in cue.components.children) {
       result.push(flattenComponent(cue.components.children[ii]));
     }
-    
+
     return result.join('');
   };
 
