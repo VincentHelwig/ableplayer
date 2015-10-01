@@ -168,6 +168,10 @@
       this.translationPath = $(media).data('translation-path');
     }
 
+    if ($(media).data('single-player') !== undefined && $(media).data('single-player') !== "false") {
+      this.useVideoSplitedView = false;
+    }
+
 
     if ($(media).data('lang') !== undefined && $(media).data('lang') !== "") {
       var lang = $(media).data('lang');

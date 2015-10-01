@@ -168,6 +168,10 @@
       this.translationPath = $(media).data('translation-path');
     }
 
+    if ($(media).data('single-player') !== undefined && $(media).data('single-player') !== "false") {
+      this.useVideoSplitedView = false;
+    }
+
 
     if ($(media).data('lang') !== undefined && $(media).data('lang') !== "") {
       var lang = $(media).data('lang');
@@ -345,6 +349,9 @@
     // it might be desirable for the transcript to always be ON, with no toggle
     // This can be overridden with data-transcript-button="false"
     this.useTranscriptButton = true;
+
+    // useVideoSplitedView
+    this.useVideoSplitedView = true;
 
     this.setButtonImages();
   };
@@ -5601,19 +5608,26 @@
   };
 
   AblePlayer.prototype.handleSignToggle = function () {
-    if (this.$signWindow.is(':visible')) {
-      this.$signWindow.hide();
-      this.$signButton.addClass('buttonOff').attr('aria-label',this.tt.showSign);
-      this.$signButton.find('span.able-clipped').text(this.tt.showSign);
-    }
-    else {
-      this.$signWindow.show();
-      // get starting position of element; used for drag & drop
-      var signWinPos = this.$signWindow.offset();
-      this.dragStartX = signWinPos.left;
-      this.dragStartY = signWinPos.top;
-      this.$signButton.removeClass('buttonOff').attr('aria-label',this.tt.hideSign);
-      this.$signButton.find('span.able-clipped').text(this.tt.hideSign);
+    if (!this.useVideoSplitedView) {
+        
+        this.$media[0].setAttribute('src', this.signFile);
+        this.$media[0].load();
+        this.$media[0].play();
+    } else {
+        if (this.$signWindow.is(':visible')) {
+          this.$signWindow.hide();
+          this.$signButton.addClass('buttonOff').attr('aria-label',this.tt.showSign);
+          this.$signButton.find('span.able-clipped').text(this.tt.showSign);
+        }
+        else {
+          this.$signWindow.show();
+          // get starting position of element; used for drag & drop
+          var signWinPos = this.$signWindow.offset();
+          this.dragStartX = signWinPos.left;
+          this.dragStartY = signWinPos.top;
+          this.$signButton.removeClass('buttonOff').attr('aria-label',this.tt.hideSign);
+          this.$signButton.find('span.able-clipped').text(this.tt.hideSign);
+        }
     }
   };
 
@@ -7485,7 +7499,9 @@
           
         }
         this.hasSignLanguage = true;
-        this.injectSignPlayerCode();
+        if (this.useVideoSplitedView) {
+            this.injectSignPlayerCode();
+        }
       }
       else {
         this.hasSignLanguage = false;

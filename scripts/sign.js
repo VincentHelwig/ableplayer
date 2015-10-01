@@ -14,7 +14,9 @@
           console.log('This video has an accompanying sign language video: ' + this.signFile);
         }
         this.hasSignLanguage = true;
-        this.injectSignPlayerCode();
+        if (this.useVideoSplitedView) {
+            this.injectSignPlayerCode();
+        }
       }
       else {
         this.hasSignLanguage = false;
