@@ -912,26 +912,31 @@
   };
 
   AblePlayer.prototype.handleSignToggle = function () {
-    if (!this.useVideoSplitedView) {
-        console.debug(this);
+    if (!this.$signButton.hasClass('buttonOff')) {
+      if (this.useVideoSplitedView) {
+        this.$signWindow.hide();
+      } else {
         this.$media[0].setAttribute('src', this.signFile);
         this.$media[0].load();
         this.$media[0].play();
-    } else {
-        if (this.$signWindow.is(':visible')) {
-          this.$signWindow.hide();
-          this.$signButton.addClass('buttonOff').attr('aria-label',this.tt.showSign);
-          this.$signButton.find('span.able-clipped').text(this.tt.showSign);
-        }
-        else {
-          this.$signWindow.show();
-          // get starting position of element; used for drag & drop
-          var signWinPos = this.$signWindow.offset();
-          this.dragStartX = signWinPos.left;
-          this.dragStartY = signWinPos.top;
-          this.$signButton.removeClass('buttonOff').attr('aria-label',this.tt.hideSign);
-          this.$signButton.find('span.able-clipped').text(this.tt.hideSign);
-        }
+      }
+      this.$signButton.addClass('buttonOff').attr('aria-label',this.tt.showSign);
+      this.$signButton.find('span.able-clipped').text(this.tt.showSign);
+    }
+    else {
+      if (this.useVideoSplitedView) {
+        this.$signWindow.show();
+      } else {
+        this.$media[0].setAttribute('src', this.file);
+        this.$media[0].load();
+        this.$media[0].play();
+      }
+      // get starting position of element; used for drag & drop
+      var signWinPos = this.$signWindow.offset();
+      this.dragStartX = signWinPos.left;
+      this.dragStartY = signWinPos.top;
+      this.$signButton.removeClass('buttonOff').attr('aria-label',this.tt.hideSign);
+      this.$signButton.find('span.able-clipped').text(this.tt.hideSign);
     }
   };
 

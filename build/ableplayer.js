@@ -432,6 +432,11 @@
     }
 
     this.$sources = this.$media.find('source');
+
+    // Duplicate src attributes as data-src
+    $.each(this.$sources, function (ii, source) {
+        $(source).attr('data-src', $(source).attr('src'));
+    });
     if (this.debug) {
       console.log('found ' + this.$sources.length + ' media sources');
     }
@@ -5608,26 +5613,31 @@
   };
 
   AblePlayer.prototype.handleSignToggle = function () {
-    if (!this.useVideoSplitedView) {
-        console.debug(this);
+    if (!this.$signButton.hasClass('buttonOff')) {
+      if (this.useVideoSplitedView) {
+        this.$signWindow.hide();
+      } else {
         this.$media[0].setAttribute('src', this.signFile);
         this.$media[0].load();
         this.$media[0].play();
-    } else {
-        if (this.$signWindow.is(':visible')) {
-          this.$signWindow.hide();
-          this.$signButton.addClass('buttonOff').attr('aria-label',this.tt.showSign);
-          this.$signButton.find('span.able-clipped').text(this.tt.showSign);
-        }
-        else {
-          this.$signWindow.show();
-          // get starting position of element; used for drag & drop
-          var signWinPos = this.$signWindow.offset();
-          this.dragStartX = signWinPos.left;
-          this.dragStartY = signWinPos.top;
-          this.$signButton.removeClass('buttonOff').attr('aria-label',this.tt.hideSign);
-          this.$signButton.find('span.able-clipped').text(this.tt.hideSign);
-        }
+      }
+      this.$signButton.addClass('buttonOff').attr('aria-label',this.tt.showSign);
+      this.$signButton.find('span.able-clipped').text(this.tt.showSign);
+    }
+    else {
+      if (this.useVideoSplitedView) {
+        this.$signWindow.show();
+      } else {
+        this.$media[0].setAttribute('src', this.file);
+        this.$media[0].load();
+        this.$media[0].play();
+      }
+      // get starting position of element; used for drag & drop
+      var signWinPos = this.$signWindow.offset();
+      this.dragStartX = signWinPos.left;
+      this.dragStartY = signWinPos.top;
+      this.$signButton.removeClass('buttonOff').attr('aria-label',this.tt.hideSign);
+      this.$signButton.find('span.able-clipped').text(this.tt.hideSign);
     }
   };
 
@@ -7493,12 +7503,15 @@
       // check to see if there's a sign language video accompanying this video
       // check only the first source
       // If sign language is provided, it must be provided for all sources
+      this.file = this.$sources.first().attr('data-src');
       this.signFile = this.$sources.first().attr('data-sign-src');
       if (this.signFile) {
         if (this.debug) {
           console.log('This video has an accompanying sign language video: ' + this.signFile);
         }
         this.hasSignLanguage = true;
+
+        // Create SignPlayerCode only if in splitted view
         if (this.useVideoSplitedView) {
             this.injectSignPlayerCode();
         }

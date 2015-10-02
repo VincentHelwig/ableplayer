@@ -179,6 +179,11 @@
     }
 
     this.$sources = this.$media.find('source');
+
+    // Duplicate src attributes as data-src
+    $.each(this.$sources, function (ii, source) {
+        $(source).attr('data-src', $(source).attr('src'));
+    });
     if (this.debug) {
       console.log('found ' + this.$sources.length + ' media sources');
     }

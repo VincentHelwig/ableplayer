@@ -8,12 +8,15 @@
       // check to see if there's a sign language video accompanying this video
       // check only the first source
       // If sign language is provided, it must be provided for all sources
+      this.file = this.$sources.first().attr('data-src');
       this.signFile = this.$sources.first().attr('data-sign-src');
       if (this.signFile) {
         if (this.debug) {
           console.log('This video has an accompanying sign language video: ' + this.signFile);
         }
         this.hasSignLanguage = true;
+
+        // Create SignPlayerCode only if in splitted view
         if (this.useVideoSplitedView) {
             this.injectSignPlayerCode();
         }
