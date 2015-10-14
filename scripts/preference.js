@@ -65,8 +65,10 @@
       prefs.push({
         'name': 'prefSignLanguage', // use sign language if available
         'label': this.tt.prefSignLanguage,
-        'default': 1 // on because in rare cases that it's actually available, users should be exposed to it
+        'default': 1, // on because in rare cases that it's actually available, users should be exposed to it
+        'hidden': !this.useVideoSplitedView
       });
+
 
       prefs.push({
         'name': 'prefDesc', // audio description default state
@@ -187,27 +189,29 @@
     keysFieldset.append(keysLegend);
 
     for (i=0; i<available.length; i++) {
-      thisPref = available[i]['name'];
-      thisDiv = $('<div>');
-      thisId = this.mediaId + '_' + thisPref;
-      thisLabel = $('<label for="' + thisId + '"> ' + available[i]['label'] + '</label>');
-      thisCheckbox = $('<input>',{
-        type: 'checkbox',
-        name: thisPref,
-        id: thisId,
-        value: 'true'
-      });
-      thisDiv.append(thisCheckbox).append(thisLabel);
-      // check current active value for this preference
-      if (this[thisPref] === 1) {
-        thisCheckbox.prop('checked',true);
-      }
-      // TODO: We need to indicate this in the prefs structure itself.
-      if (i === 0 || i === 1 || i === 2) { // this is a key preference
-        keysFieldset.append(thisDiv);
-      }
-      else { // this is a feature preference
-        featuresFieldset.append(thisDiv);
+      if (!available[i]['hidden']) {
+        thisPref = available[i]['name'];
+        thisDiv = $('<div>');
+        thisId = this.mediaId + '_' + thisPref;
+        thisLabel = $('<label for="' + thisId + '"> ' + available[i]['label'] + '</label>');
+        thisCheckbox = $('<input>',{
+          type: 'checkbox',
+          name: thisPref,
+          id: thisId,
+          value: 'true'
+        });
+        thisDiv.append(thisCheckbox).append(thisLabel);
+        // check current active value for this preference
+        if (this[thisPref] === 1) {
+          thisCheckbox.prop('checked',true);
+        }
+        // TODO: We need to indicate this in the prefs structure itself.
+        if (i === 0 || i === 1 || i === 2) { // this is a key preference
+          keysFieldset.append(thisDiv);
+        }
+        else { // this is a feature preference
+          featuresFieldset.append(thisDiv);
+        }
       }
     }
     // Now assemble all the parts
