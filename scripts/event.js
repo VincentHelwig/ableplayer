@@ -79,6 +79,7 @@
         this.playMedia();
       }
       this.swappingSrc = false; // swapping is finished
+      this.startedPlaying = false;
       this.refreshControls();
     }
   };
