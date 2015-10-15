@@ -1372,19 +1372,22 @@
       prefs.push({
         'name': 'prefClosedDesc', // use closed description if available
         'label': this.tt.prefClosedDesc,
-        'default': 0 // off because experimental
+        'default': 0, // off because experimental
+        'hidden': true
       });
 
       prefs.push({
         'name': 'prefDescPause', // automatically pause when closed description starts
         'label': this.tt.prefDescPause,
-        'default': 0 // off because it burdens user with restarting after every pause
+        'default': 0, // off because it burdens user with restarting after every pause
+        'hidden': true
       });
 
       prefs.push({
         'name': 'prefVisibleDesc', // visibly show closed description (if avilable and used)
         'label': this.tt.prefVisibleDesc,
-        'default': 1 // on because sighted users probably want to see this cool feature in action
+        'default': 0, // on because sighted users probably want to see this cool feature in action
+        'hidden': true
       });
 
       prefs.push({
