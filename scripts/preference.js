@@ -77,6 +77,12 @@
       });
 
       prefs.push({
+        'name': 'prefCued', // cued speech default state
+        'label': this.tt.prefCued,
+        'default': 0 // off because users who don't need it might find it distracting
+      });
+
+      prefs.push({
         'name': 'prefClosedDesc', // use closed description if available
         'label': this.tt.prefClosedDesc,
         'default': 0, // off because experimental

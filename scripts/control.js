@@ -484,6 +484,17 @@
       }
     }
 
+    if (this.$cuedButton) {
+      if (this.cuedOn) {
+        this.$cuedButton.removeClass('buttonOff').attr('aria-label',this.tt.turnOffCued);
+        this.$cuedButton.find('span.able-clipped').text(this.tt.turnOffCued);
+      }
+      else {
+        this.$cuedButton.addClass('buttonOff').attr('aria-label',this.tt.turnOnCued);
+        this.$cuedButton.find('span.able-clipped').text(this.tt.turnOnCued);
+      }
+    }
+
     if (this.$ccButton) {
       if (this.usingYouTubeCaptions) {
         var captionsCount = this.ytCaptions.length;
@@ -885,6 +896,12 @@
   AblePlayer.prototype.handleDescriptionToggle = function() {
     this.descOn = !this.descOn;
     this.updateDescription();
+    this.refreshControls();
+  };
+
+  AblePlayer.prototype.handleCuedToggle = function() {
+    this.cuedOn = !this.cuedOn;
+    this.updateCued();
     this.refreshControls();
   };
 

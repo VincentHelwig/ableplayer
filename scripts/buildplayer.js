@@ -671,6 +671,15 @@
         }
         key = 'c';
       }
+      else if (this.controls[i] === 'cued') {
+        if (this.cuedOn) {
+          label = this.tt.turnOffCued;
+        }
+        else {
+          label = this.tt.turnOnCued;
+        }
+        key = 'l';
+      }
       else if (this.controls[i] === 'descriptions') {
         if (this.descOn) {
           label = this.tt.turnOffDescriptions;
@@ -765,6 +774,9 @@
       }
       if (this.hasSignLanguage) {
         blr.push('sign'); // sign language
+      }
+      if (this.hasOpenCued) {
+        blr.push('cued'); // cued speech
       }
       if (this.hasOpenDesc || this.hasClosedDesc) {
         blr.push('descriptions'); //audio description
@@ -1005,6 +1017,11 @@
               newButton.addClass('buttonOff').attr('title',this.tt.turnOnDescriptions);
             }
           }
+          else if (control === 'cued') {
+            if (!this.prefCued || this.prefCued !== 1) {
+              newButton.addClass('buttonOff').attr('title',this.tt.turnOnCued);
+            }
+          }
 
           controllerSpan.append(newButton);
           // create variables of buttons that are referenced throughout the class
@@ -1016,6 +1033,13 @@
           }
           else if (control === 'sign') {
             this.$signButton = newButton;
+          }
+          else if (control === 'cued') {
+            this.$cuedButton = newButton;
+            // gray out description button if description is not active
+            if (!this.cuedOn) {
+              this.$cuedButton.addClass('buttonOff').attr('title',this.tt.turnOnCued);
+            }
           }
           else if (control === 'descriptions') {
             this.$descButton = newButton;
@@ -1221,6 +1245,14 @@
         else {
           return this.tt.showCaptions;
         }
+      }
+    }
+    else if (control === 'cued') {
+      if (this.cuedOn) {
+        return this.tt.turnOffCued;
+      }
+      else {
+        return this.tt.turnOnCued;
       }
     }
     else if (control === 'descriptions') {

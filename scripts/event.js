@@ -167,6 +167,9 @@
     else if (whichButton === 'descriptions') {
       this.handleDescriptionToggle();
     }
+    else if (whichButton === 'cued') {
+      this.handleCuedToggle();
+    }
     else if (whichButton === 'sign') {
       this.handleSignToggle();
     }
@@ -271,6 +274,11 @@
     else if (which === 110) { // n = narration (description)
       if (this.usingModifierKeys(e)) {
         this.handleDescriptionToggle();
+      }
+    }
+    else if (which === 108) { // l = cued speech
+      if (this.usingModifierKeys(e)) {
+        this.handleCuedToggle();
       }
     }
     else if (which === 104) { // h = help

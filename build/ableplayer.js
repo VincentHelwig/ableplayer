@@ -582,6 +582,7 @@
     this.initSignLanguage();
     this.setupTracks().then(function () {
       thisObj.setupPopups();
+      thisObj.initCued();
       thisObj.initDescription();
       thisObj.updateDescription();
       thisObj.initializing = false;
@@ -1366,6 +1367,12 @@
       prefs.push({
         'name': 'prefDesc', // audio description default state
         'label': this.tt.prefDesc,
+        'default': 0 // off because users who don't need it might find it distracting
+      });
+
+      prefs.push({
+        'name': 'prefCued', // cued speech default state
+        'label': this.tt.prefCued,
         'default': 0 // off because users who don't need it might find it distracting
       });
 
@@ -3027,6 +3034,15 @@
         }
         key = 'c';
       }
+      else if (this.controls[i] === 'cued') {
+        if (this.cuedOn) {
+          label = this.tt.turnOffCued;
+        }
+        else {
+          label = this.tt.turnOnCued;
+        }
+        key = 'l';
+      }
       else if (this.controls[i] === 'descriptions') {
         if (this.descOn) {
           label = this.tt.turnOffDescriptions;
@@ -3121,6 +3137,9 @@
       }
       if (this.hasSignLanguage) {
         blr.push('sign'); // sign language
+      }
+      if (this.hasOpenCued) {
+        blr.push('cued'); // cued speech
       }
       if (this.hasOpenDesc || this.hasClosedDesc) {
         blr.push('descriptions'); //audio description
@@ -3361,6 +3380,11 @@
               newButton.addClass('buttonOff').attr('title',this.tt.turnOnDescriptions);
             }
           }
+          else if (control === 'cued') {
+            if (!this.prefCued || this.prefCued !== 1) {
+              newButton.addClass('buttonOff').attr('title',this.tt.turnOnCued);
+            }
+          }
 
           controllerSpan.append(newButton);
           // create variables of buttons that are referenced throughout the class
@@ -3372,6 +3396,13 @@
           }
           else if (control === 'sign') {
             this.$signButton = newButton;
+          }
+          else if (control === 'cued') {
+            this.$cuedButton = newButton;
+            // gray out description button if description is not active
+            if (!this.cuedOn) {
+              this.$cuedButton.addClass('buttonOff').attr('title',this.tt.turnOnCued);
+            }
           }
           else if (control === 'descriptions') {
             this.$descButton = newButton;
@@ -3577,6 +3608,14 @@
         else {
           return this.tt.showCaptions;
         }
+      }
+    }
+    else if (control === 'cued') {
+      if (this.cuedOn) {
+        return this.tt.turnOffCued;
+      }
+      else {
+        return this.tt.turnOnCued;
       }
     }
     else if (control === 'descriptions') {
@@ -5192,6 +5231,17 @@
       }
     }
 
+    if (this.$cuedButton) {
+      if (this.cuedOn) {
+        this.$cuedButton.removeClass('buttonOff').attr('aria-label',this.tt.turnOffCued);
+        this.$cuedButton.find('span.able-clipped').text(this.tt.turnOffCued);
+      }
+      else {
+        this.$cuedButton.addClass('buttonOff').attr('aria-label',this.tt.turnOnCued);
+        this.$cuedButton.find('span.able-clipped').text(this.tt.turnOnCued);
+      }
+    }
+
     if (this.$ccButton) {
       if (this.usingYouTubeCaptions) {
         var captionsCount = this.ytCaptions.length;
@@ -5593,6 +5643,12 @@
   AblePlayer.prototype.handleDescriptionToggle = function() {
     this.descOn = !this.descOn;
     this.updateDescription();
+    this.refreshControls();
+  };
+
+  AblePlayer.prototype.handleCuedToggle = function() {
+    this.cuedOn = !this.cuedOn;
+    this.updateCued();
     this.refreshControls();
   };
 
@@ -6735,6 +6791,9 @@
     else if (whichButton === 'descriptions') {
       this.handleDescriptionToggle();
     }
+    else if (whichButton === 'cued') {
+      this.handleCuedToggle();
+    }
     else if (whichButton === 'sign') {
       this.handleSignToggle();
     }
@@ -6839,6 +6898,11 @@
     else if (which === 110) { // n = narration (description)
       if (this.usingModifierKeys(e)) {
         this.handleDescriptionToggle();
+      }
+    }
+    else if (which === 108) { // l = cued speech
+      if (this.usingModifierKeys(e)) {
+        this.handleCuedToggle();
       }
     }
     else if (which === 104) { // h = help
@@ -7599,6 +7663,120 @@
     }
 
     this.initDragDrop(this.$signWindow);
+  };
+
+})(jQuery);
+
+(function ($) {
+  AblePlayer.prototype.initCued = function() {
+    // set default mode for delivering description (open vs closed)
+    // based on availability and user preference
+
+    // first, check to see if there's an open-described version of this video
+    // checks only the first source
+    // Therefore, if a described version is provided,
+    // it must be provided for all sources
+    this.cuedFile = this.$sources.first().attr('data-cued-src');
+    if (this.cuedFile) {
+      if (this.debug) {
+        console.log('This video has a cued speech version: ' + this.cuedFile);
+      }
+      this.hasOpenCued = true;
+      if (this.prefCued) {
+        this.cuedOn = true;
+      }
+    }
+    else {
+      if (this.debug) {
+        console.log('This video does not have a cued speech version');
+      }
+      this.hasOpenCued = false;
+    }
+
+    this.updateCued();
+  };
+
+  AblePlayer.prototype.updateCued = function (time) {
+    var useCuedSpeech;
+
+    if (this.cuedOn) {
+      useCuedSpeech = true;
+    }
+    else {
+      useCuedSpeech = false;
+    }
+
+    if (this.hasOpenCued && this.usingCuedSpeech() !== useCuedSpeech) {
+      this.swapCued();
+    }
+  };
+
+  // Returns true if currently using cued speech, false otherwise.
+  AblePlayer.prototype.usingCuedSpeech = function () {
+    return (this.$sources.first().attr('data-cued-src') === this.$sources.first().attr('src'));
+  };
+
+  AblePlayer.prototype.swapCued = function() {
+    // swap cued and non-cued source media, depending on which is playing
+    // this function is only called in two circumstances:
+    // 1. Swapping to cued version when initializing player (based on user prefs & availability)
+    // 2. User is toggling description
+
+    var i, origSrc, descSrc, srcType, jwSourceIndex, newSource;
+
+    if (!this.usingCuedSpeech()) {
+      for (i=0; i < this.$sources.length; i++) {
+        // for all <source> elements, replace src with data-cued-src (if one exists)
+        // then store original source in a new data-orig-src attribute
+        origSrc = this.$sources[i].getAttribute('src');
+        descSrc = this.$sources[i].getAttribute('data-cued-src');
+        srcType = this.$sources[i].getAttribute('type');
+        if (descSrc) {
+          this.$sources[i].setAttribute('src',descSrc);
+          this.$sources[i].setAttribute('data-orig-src',origSrc);
+        }
+        if (srcType === 'video/mp4') {
+          jwSourceIndex = i;
+        }
+      }
+      if (this.initializing) { // user hasn't pressed play yet
+        this.swappingSrc = false;
+      }
+      else {
+        this.swappingSrc = true;
+      }
+    }
+    else {
+      // the cued version is currently playing
+      // swap back to the original
+      for (i=0; i < this.$sources.length; i++) {
+        // for all <source> elements, replace src with data-orig-src
+        origSrc = this.$sources[i].getAttribute('data-orig-src');
+        srcType = this.$sources[i].getAttribute('type');
+        if (origSrc) {
+          this.$sources[i].setAttribute('src',origSrc);
+        }
+        if (srcType === 'video/mp4') {
+          jwSourceIndex = i;
+        }
+      }
+      // No need to check for this.initializing
+      // This function is only called during initialization
+      // if swapping from non-cued to cued
+      this.swappingSrc = true;
+    }
+    // now reload the source file.
+    if (this.player === 'html5') {
+      this.media.load();
+    }
+    else if (this.player === 'jw' && this.jwPlayer) {
+      newSource = this.$sources[jwSourceIndex].getAttribute('src');
+      this.jwPlayer.load({file: newSource});
+    }
+    else if (this.player === 'youtube') {
+      // Can't switch youtube tracks, so do nothing.
+      // TODO: Disable open descriptions button with Youtube.
+    }
   };
 
 })(jQuery);

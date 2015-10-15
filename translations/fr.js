@@ -1,12 +1,12 @@
 {
-  
+
 "playerHeading": "Media player",
 
 "faster": "Accélerer",
 
 "slower": "Ralentir",
 
-"play": "Lire", 
+"play": "Lire",
 
 "pause": "Pause",
 
@@ -26,11 +26,15 @@
 
 "showTranscript": "Afficher transcription",
 
-"hideTranscript": "Masquer transcription", 
+"hideTranscript": "Masquer transcription",
 
-"turnOnDescriptions": "Audio-description activée", 
+"turnOnDescriptions": "Audio-description activée",
 
-"turnOffDescriptions": "Audio-description désactivée", 
+"turnOffDescriptions": "Audio-description désactivée",
+
+"turnOnCued": "LPC activée",
+
+"turnOffCued": "LPC désactivée", 
 
 "chapters": "Chapitres",
 
@@ -46,7 +50,7 @@
 
 "unmute": "Activer le son",
 
-"volume": "Volume", 
+"volume": "Volume",
 
 "volumeUp": "Volume +",
 
@@ -66,13 +70,13 @@
 
 "video": "video",
 
-"or": "ou", 
+"or": "ou",
 
 "spacebar": "Barre d'espacement",
 
 "autoScroll": "Défilement automatique",
 
-"unknown": "Inconnu", 
+"unknown": "Inconnu",
 
 "statusPlaying": "En lecture",
 
@@ -152,7 +156,7 @@
 
 "cancel": "Annuler",
 
-"ok": "Ok", 
+"ok": "Ok",
 
 "done": "Fait",
 
@@ -160,11 +164,11 @@
 
 "windowButtonLabel": "Options de la fenêtre",
 
-"windowMove": "Déplacer", 
+"windowMove": "Déplacer",
 
 "windowMoveAlert": "Glisser ou utiliser les flèches de déplacements pour déplacer la fenêtre; Entrée pour arrêter",
 
-"windowResize": "Redimensionner", 
+"windowResize": "Redimensionner",
 
 "windowResizeHeading": "Redimensionner fenêtre d'interprétation",
 
@@ -174,7 +178,7 @@
 
 "height": "Hauteur",
 
-"windowSendBack": "Passer derrière", 
+"windowSendBack": "Passer derrière",
 
 "windowSendBackAlert": "Cette fenêtre est maintenant derrière d'autres objets de la page.",
 
