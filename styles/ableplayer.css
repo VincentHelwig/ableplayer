@@ -350,6 +350,17 @@ div.modalDialog button:focus {
 	padding-left: 0.5em;
 }
 
+.able-prefs-form .radio-container {
+    border-bottom: 1px solid grey;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+
+.radio-container legend {
+    font-weight: normal;
+    padding-bottom: 10px;
+}
+
 /*
   Help Dialog
 */

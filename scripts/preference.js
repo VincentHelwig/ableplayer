@@ -55,31 +55,35 @@
       'label': this.tt.prefShiftKey,
       'default': 0
     });
+
     if (this.mediaType === 'video') { // features prefs apply only to video
+      prefs.push({
+        'name': 'prefVideo',
+        'label': this.tt.prefVideo,
+        'default': 1,
+        'options': [{
+            'name': 'prefDefault',
+            'label': this.tt.prefDefault,
+            'value': 0
+        }, {
+            'name': 'prefDesc',
+            'label': this.tt.prefDesc,
+            'value': 1
+        }, {
+            'name': 'prefSignLanguage',
+            'label': this.tt.prefSignLanguage,
+            'value': 2
+        }, {
+            'name': 'prefCued',
+            'label': this.tt.prefCued,
+            'value': 3
+        }]
+      });
+
       prefs.push({
         'name': 'prefCaptions', // closed captions default state
         'label': this.tt.prefCaptions,
         'default': 1 // on because many users can benefit
-      });
-
-      prefs.push({
-        'name': 'prefSignLanguage', // use sign language if available
-        'label': this.tt.prefSignLanguage,
-        'default': 1, // on because in rare cases that it's actually available, users should be exposed to it
-        'hidden': !this.useVideoSplitedView
-      });
-
-
-      prefs.push({
-        'name': 'prefDesc', // audio description default state
-        'label': this.tt.prefDesc,
-        'default': 0 // off because users who don't need it might find it distracting
-      });
-
-      prefs.push({
-        'name': 'prefCued', // cued speech default state
-        'label': this.tt.prefCued,
-        'default': 0 // off because users who don't need it might find it distracting
       });
 
       prefs.push({
@@ -172,7 +176,7 @@
     var prefsDiv, introText, prefsIntro,
     featuresFieldset, featuresLegend,
     keysFieldset, keysLegend,
-    i, thisPref, thisDiv, thisId, thisLabel, thisCheckbox,
+    i, thisPref, thisDiv, thisId, thisLabel, thisCheckbox, thisRadioButton, radioDiv, radioContainerDiv,
     thisObj, available;
 
     thisObj = this;
@@ -202,17 +206,35 @@
         thisPref = available[i]['name'];
         thisDiv = $('<div>');
         thisId = this.mediaId + '_' + thisPref;
-        thisLabel = $('<label for="' + thisId + '"> ' + available[i]['label'] + '</label>');
-        thisCheckbox = $('<input>',{
-          type: 'checkbox',
-          name: thisPref,
-          id: thisId,
-          value: 'true'
-        });
-        thisDiv.append(thisCheckbox).append(thisLabel);
-        // check current active value for this preference
-        if (this[thisPref] === 1) {
-          thisCheckbox.prop('checked',true);
+        if (!available[i]['options']) {
+            thisLabel = $('<label for="' + thisId + '"> ' + available[i]['label'] + '</label>');
+            thisCheckbox = $('<input>',{
+              type: 'checkbox',
+              name: thisPref,
+              id: thisId,
+              value: 'true'
+            });
+            thisDiv.append(thisCheckbox).append(thisLabel);
+            // check current active value for this preference
+            if (this[thisPref] === 1) {
+              thisCheckbox.prop('checked',true);
+            }
+        } else {
+            radioContainerDiv = $('<div class="radio-container">');
+            radioContainerDiv.append($('<legend for="' + thisId + '"> ' + available[i]['label'] + '</legend>'));
+            jQuery.each(available[i]['options'], function(index, value) {
+              radioDiv = $('<div>');
+              thisLabel = $('<label for="' + value.name + '"> ' + value.label + '</label>');
+              thisRadioButton = $('<input>',{
+                type: 'radio',
+                name: thisPref,
+                id: value.name,
+                value: value.value
+              });
+              radioDiv.append(thisRadioButton).append(thisLabel);
+              radioContainerDiv.append(radioDiv);
+            });
+            thisDiv.append(radioContainerDiv);
         }
         // TODO: We need to indicate this in the prefs structure itself.
         if (i === 0 || i === 1 || i === 2) { // this is a key preference

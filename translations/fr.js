@@ -34,7 +34,7 @@
 
 "turnOnCued": "LPC activée",
 
-"turnOffCued": "LPC désactivée", 
+"turnOffCued": "LPC désactivée",
 
 "chapters": "Chapitres",
 
@@ -122,11 +122,17 @@
 
 "prefShiftKey": "Majuscule",
 
+"prefVideo": "Activer par défaut (un seul choix possible) :",
+
 "prefCaptions": "Sous-titres activés par défaut",
 
-"prefSignLanguage": "LSF activé si disponible",
+"prefDefault": "Vidéo principale",
 
-"prefDesc": "Audio-description activée par défaut",
+"prefSignLanguage": "Vidéo principcale avec LSF",
+
+"prefDesc": "Vidéo principcale avec audiodescription",
+
+"prefCued": "Vidéo principcale avec LPC",
 
 "prefClosedDesc": "Description par texte si disponible",
 
