@@ -1542,8 +1542,8 @@
     // Now assemble all the parts
     prefsDiv
       .append(prefsIntro)
-      .append(keysFieldset)
-      .append(featuresFieldset);
+      .append(featuresFieldset)
+      .append(keysFieldset);
 
     // must be appended to the BODY!
     // otherwise when aria-hidden="true" is applied to all background content
