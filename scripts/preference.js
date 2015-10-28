@@ -60,7 +60,7 @@
       prefs.push({
         'name': 'prefVideo',
         'label': this.tt.prefVideo,
-        'default': 1,
+        'default': 0,
         'options': [{
             'name': 'prefDefault',
             'label': this.tt.prefDefault,
@@ -233,6 +233,10 @@
               });
               radioDiv.append(thisRadioButton).append(thisLabel);
               radioContainerDiv.append(radioDiv);
+              // check current active value for this preference
+              if (thisObj[thisPref] === value.value) {
+                thisRadioButton.prop('checked',true);
+              }
             });
             thisDiv.append(radioContainerDiv);
         }
@@ -289,27 +293,40 @@
     var available = this.getAvailablePreferences();
     for (var ii = 0; ii < available.length; ii++) {
       var prefName = available[ii]['name'];
-      if ($('input[name="' + prefName + '"]').is(':checked')) {
-        cookie.preferences[prefName] = 1;
-        if (this[prefName] === 1) {
-          // nothing has changed
+
+      if ($('input[name="' + prefName + '"]').length <= 1) {
+        if ($('input[name="' + prefName + '"]').is(':checked')) {
+          cookie.preferences[prefName] = 1;
+          if (this[prefName] === 1) {
+            // nothing has changed
+          }
+          else {
+            // user has just turned this pref on
+            this[prefName] = 1;
+            numChanges++;
+          }
         }
-        else {
-          // user has just turned this pref on
-          this[prefName] = 1;
-          numChanges++;
+        else { // thisPref is not checked
+          cookie.preferences[prefName] = 0;
+          if (this[prefName] === 1) {
+            // user has just turned this pref off
+            this[prefName] = 0;
+            numChanges++;
+          }
+          else {
+            // nothing has chaged
+          }
         }
-      }
-      else { // thisPref is not checked
-        cookie.preferences[prefName] = 0;
-        if (this[prefName] === 1) {
-          // user has just turned this pref off
-          this[prefName] = 0;
-          numChanges++;
-        }
-        else {
-          // nothing has chaged
-        }
+      } else {
+          cookie.preferences[prefName] = parseInt($('input[name="' + prefName + '"]:checked').val());
+          if (this[prefName] === cookie.preferences[prefName]) {
+            // nothing has changed
+          }
+          else {
+            // user has just turned this pref on
+            this[prefName] = cookie.preferences[prefName];
+            numChanges++;
+          }
       }
     }
     if (numChanges > 0) {
