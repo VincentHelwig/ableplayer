@@ -113,7 +113,7 @@
   /* icomoon font icon */
   font-size: 26px;
   width: 24px;
-  margin: 0 5px;
+  margin: 0 4px;
   padding: 0;
 }
 .able-controller button > img {
@@ -468,79 +468,79 @@ div.modalDialog button:focus {
 }
 
 .icon-play:before {
-	content: "\f04b";
+	content: "\EA16";
 }
 .icon-pause:before {
-	content: "\f04c";
+	content: "\EA17";
 }
 .icon-stop:before {
-	content: "\f04d";
+	content: "\EA18";
 }
 .icon-fullscreen-expand:before {
-	content: "\f065";
+	content: "\EA19";
 }
 .icon-fullscreen-collapse:before {
-	content: "\f066";
+	content: "\EA20";
 }
 .icon-pipe:before {
-	content: "\e600";
+	content: "\EA02";
 }
 .icon-captions:before {
-	content: "\e601";
+	content: "\EA05";
 }
 .icon-descriptions:before {
-	content: "\e602";
+	content: "\EA01";
 }
 .icon-transcript:before {
-	content: "\f15c";
+	content: "\EA24";
 }
 .icon-slower:before {
-	content: "\f0dd";
+	content: "\EA21";
 }
 .icon-faster:before {
-	content: "\f0de";
+	content: "\EA22";
 }
 .icon-help:before {
-	content: "\f128";
+	content: "\EA23";
 }
 .icon-close:before {
-	content: "\f00d";
+	content: "\EA15";
 }
 .icon-rewind:before {
-	content: "\e603";
+	content: "\EA03";
 }
 .icon-forward:before {
-	content: "\e604";
+	content: "\EA04";
 }
 .icon-volume-loud:before {
-	content: "\e60b";
+	content: "\EA12";
 }
 .icon-volume-medium:before {
-	content: "\e605";
+	content: "\EA06";
 }
 .icon-volume-soft:before {
-	content: "\e60c";
+	content: "\EA13";
 }
 .icon-volume-mute:before {
-	content: "\e606";
+	content: "\EA07";
 }
 .icon-volume-up:before {
-	content: "\e607";
+	content: "\EA09";
 }
 .icon-volume-down:before {
-	content: "\e608";
+	content: "\EA08";
 }
 .icon-chapters:before {
-	content: "\e609";
+	content: "\EA10";
 }
 .icon-preferences:before {
-	content: "\e60d";
+	content: "\EA14";
 }
 .icon-sign:before {
-	content: "\e60a";
+	content: "\EA11";
 }
 .icon-cued:before {
-	content: "\e60a";
+	content: "\EA25";
 }
 
 /*
