@@ -4530,7 +4530,7 @@
         
       }
       this.hasOpenDesc = true;
-      if (this.prefDesc) {
+      if (this.prefVideo === 1) {
         this.descOn = true;
       }
     }
@@ -7682,7 +7682,7 @@
         
       }
       this.hasOpenCued = true;
-      if (this.prefCued) {
+      if (this.prefVideo === 3) {
         this.cuedOn = true;
       }
     }

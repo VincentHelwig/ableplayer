@@ -13,7 +13,7 @@
         console.log('This video has a described version: ' + this.descFile);
       }
       this.hasOpenDesc = true;
-      if (this.prefDesc) {
+      if (this.prefVideo === 1) {
         this.descOn = true;
       }
     }

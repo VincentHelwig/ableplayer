@@ -13,7 +13,7 @@
         console.log('This video has a cued speech version: ' + this.cuedFile);
       }
       this.hasOpenCued = true;
-      if (this.prefCued) {
+      if (this.prefVideo === 3) {
         this.cuedOn = true;
       }
     }
