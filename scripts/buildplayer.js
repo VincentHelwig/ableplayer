@@ -55,6 +55,10 @@
       this.addTranscriptAreaEvents();
     }
 
+    for (var i=0; i < this.$sources.length; i++) {
+      this.$sources[i].setAttribute('data-orig-src', this.$sources[i].getAttribute('src'));
+    }
+
     this.injectAlert();
     this.injectPlaylist();
     // create the hidden form that will be triggered by a click on the Preferences button

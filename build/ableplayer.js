@@ -2452,6 +2452,10 @@
       this.addTranscriptAreaEvents();
     }
 
+    for (var i=0; i < this.$sources.length; i++) {
+      this.$sources[i].setAttribute('data-orig-src', this.$sources[i].getAttribute('src'));
+    }
+
     this.injectAlert();
     this.injectPlaylist();
     // create the hidden form that will be triggered by a click on the Preferences button
@@ -4589,12 +4593,10 @@
       for (i=0; i < this.$sources.length; i++) {
         // for all <source> elements, replace src with data-desc-src (if one exists)
         // then store original source in a new data-orig-src attribute
-        origSrc = this.$sources[i].getAttribute('src');
         descSrc = this.$sources[i].getAttribute('data-desc-src');
         srcType = this.$sources[i].getAttribute('type');
         if (descSrc) {
           this.$sources[i].setAttribute('src',descSrc);
-          this.$sources[i].setAttribute('data-orig-src',origSrc);
         }
         if (srcType === 'video/mp4') {
           jwSourceIndex = i;
@@ -7726,12 +7728,10 @@
       for (i=0; i < this.$sources.length; i++) {
         // for all <source> elements, replace src with data-cued-src (if one exists)
         // then store original source in a new data-orig-src attribute
-        origSrc = this.$sources[i].getAttribute('src');
         descSrc = this.$sources[i].getAttribute('data-cued-src');
         srcType = this.$sources[i].getAttribute('type');
         if (descSrc) {
           this.$sources[i].setAttribute('src',descSrc);
-          this.$sources[i].setAttribute('data-orig-src',origSrc);
         }
         if (srcType === 'video/mp4') {
           jwSourceIndex = i;
