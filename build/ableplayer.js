@@ -167,12 +167,7 @@
     if ($(media).data('translation-path') !== undefined && $(media).data('translation-path') !== "false") {
       this.translationPath = $(media).data('translation-path');
     }
-
-    if ($(media).data('single-player') !== undefined && $(media).data('single-player') !== "false") {
-      this.useVideoSplitedView = false;
-    }
-
-
+    
     if ($(media).data('lang') !== undefined && $(media).data('lang') !== "") {
       var lang = $(media).data('lang');
       if (lang.length == 2) {
@@ -5711,42 +5706,6 @@
       this.$transcriptArea.show();
       this.$transcriptButton.removeClass('buttonOff').attr('aria-label',this.tt.hideTranscript);
       this.$transcriptButton.find('span.able-clipped').text(this.tt.hideTranscript);
-    }
-  };
-
-  AblePlayer.prototype.handleSignToggle = function () {
-    var currentTime;
-    if (!this.$signButton.hasClass('buttonOff')) {
-      if (this.useVideoSplitedView) {
-        this.$signWindow.hide();
-      } else {
-        currentTime = this.media.currentTime;
-        this.$media[0].setAttribute('src', this.signFile);
-        this.swappingSrc = true;
-        this.startTime = currentTime;
-        this.autoplay = true;
-        this.onMediaNewSourceLoad();
-      }
-      this.$signButton.addClass('buttonOff').attr('aria-label',this.tt.showSign);
-      this.$signButton.find('span.able-clipped').text(this.tt.showSign);
-    }
-    else {
-      if (this.useVideoSplitedView) {
-        this.$signWindow.show();
-        // get starting position of element; used for drag & drop
-        var signWinPos = this.$signWindow.offset();
-        this.dragStartX = signWinPos.left;
-        this.dragStartY = signWinPos.top;
-      } else {
-        currentTime = this.media.currentTime;
-        this.$media[0].setAttribute('src', this.file);
-        this.swappingSrc = true;
-        this.startTime = currentTime;
-        this.autoplay = true;
-        this.onMediaNewSourceLoad();
-      }
-      this.$signButton.removeClass('buttonOff').attr('aria-label',this.tt.hideSign);
-      this.$signButton.find('span.able-clipped').text(this.tt.hideSign);
     }
   };
 

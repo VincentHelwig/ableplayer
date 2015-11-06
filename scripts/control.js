@@ -928,42 +928,6 @@
     }
   };
 
-  AblePlayer.prototype.handleSignToggle = function () {
-    var currentTime;
-    if (!this.$signButton.hasClass('buttonOff')) {
-      if (this.useVideoSplitedView) {
-        this.$signWindow.hide();
-      } else {
-        currentTime = this.media.currentTime;
-        this.$media[0].setAttribute('src', this.signFile);
-        this.swappingSrc = true;
-        this.startTime = currentTime;
-        this.autoplay = true;
-        this.onMediaNewSourceLoad();
-      }
-      this.$signButton.addClass('buttonOff').attr('aria-label',this.tt.showSign);
-      this.$signButton.find('span.able-clipped').text(this.tt.showSign);
-    }
-    else {
-      if (this.useVideoSplitedView) {
-        this.$signWindow.show();
-        // get starting position of element; used for drag & drop
-        var signWinPos = this.$signWindow.offset();
-        this.dragStartX = signWinPos.left;
-        this.dragStartY = signWinPos.top;
-      } else {
-        currentTime = this.media.currentTime;
-        this.$media[0].setAttribute('src', this.file);
-        this.swappingSrc = true;
-        this.startTime = currentTime;
-        this.autoplay = true;
-        this.onMediaNewSourceLoad();
-      }
-      this.$signButton.removeClass('buttonOff').attr('aria-label',this.tt.hideSign);
-      this.$signButton.find('span.able-clipped').text(this.tt.hideSign);
-    }
-  };
-
   AblePlayer.prototype.isFullscreen = function () {
     if (this.nativeFullscreenSupported()) {
       return (document.fullscreenElement ||
