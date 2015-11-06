@@ -5278,6 +5278,17 @@
       }
     }
 
+    if (this.$signButton) {
+      if (this.signOn) {
+        this.$signButton.removeClass('buttonOff').attr('aria-label',this.tt.showSign);
+        this.$signButton.find('span.able-clipped').text(this.tt.showSign);
+      }
+      else {
+        this.$signButton.addClass('buttonOff').attr('aria-label',this.tt.hideSign);
+        this.$signButton.find('span.able-clipped').text(this.tt.hideSign);
+      }
+    }
+
     if (this.$ccButton) {
       if (this.usingYouTubeCaptions) {
         var captionsCount = this.ytCaptions.length;
@@ -5678,13 +5689,25 @@
 
   AblePlayer.prototype.handleDescriptionToggle = function() {
     this.descOn = !this.descOn;
+    this.cuedOn = false;
+    this.signOn = false;
     this.updateDescription();
     this.refreshControls();
   };
 
   AblePlayer.prototype.handleCuedToggle = function() {
     this.cuedOn = !this.cuedOn;
+    this.descOn = false;
+    this.signOn = false;
     this.updateCued();
+    this.refreshControls();
+  };
+
+  AblePlayer.prototype.handleSignToggle = function() {
+    this.signOn = !this.signOn;
+    this.descOn = false;
+    this.cuedOn = false;
+    this.updateSign();
     this.refreshControls();
   };
 
@@ -7574,100 +7597,117 @@
 
 (function ($) {
   AblePlayer.prototype.initSignLanguage = function() {
+    // set default mode for delivering description (open vs closed)
+    // based on availability and user preference
 
-    // Sign language is only currently supported in HTML5 player, not fallback or YouTube
-    // only initialize sign language if user wants it
-    // since it requires downloading a second video & consumes bandwidth
-    if (this.player === 'html5' && this.prefSignLanguage) {
-      // check to see if there's a sign language video accompanying this video
-      // check only the first source
-      // If sign language is provided, it must be provided for all sources
-      this.file = this.$sources.first().attr('data-src');
-      this.signFile = this.$sources.first().attr('data-sign-src');
-      if (this.signFile) {
-        if (this.debug) {
-          console.log('This video has an accompanying sign language video: ' + this.signFile);
-        }
-        this.hasSignLanguage = true;
+    // first, check to see if there's an open-described version of this video
+    // checks only the first source
+    // Therefore, if a described version is provided,
+    // it must be provided for all sources
+    this.signFile = this.$sources.first().attr('data-sign-src');
+    if (this.signFile) {
+      if (this.debug) {
+        console.log('This video has a sign language version: ' + this.cuedFile);
+      }
+      this.hasSignLanguage = true;
+      if (this.prefVideo === 2) {
+        this.signOn = true;
+      }
+    }
+    else {
+      if (this.debug) {
+        console.log('This video does not have a sign language version');
+      }
+      this.hasSignLanguage = false;
+    }
 
-        // Create SignPlayerCode only if in splitted view
-        if (this.useVideoSplitedView) {
-            this.injectSignPlayerCode();
-        }
-      }
-      else {
-        this.hasSignLanguage = false;
-      }
+    this.updateSign();
+  };
+
+  AblePlayer.prototype.updateSign = function (time) {
+    var useSign;
+
+    if (this.signOn) {
+      useSign = true;
+    }
+    else {
+      useSign = false;
+    }
+
+    if (this.hasSignLanguage && this.usingSign() !== useSign) {
+      this.swapSign();
     }
   };
 
-  AblePlayer.prototype.injectSignPlayerCode = function() {
+  // Returns true if currently using cued speech, false otherwise.
+  AblePlayer.prototype.usingSign = function () {
+    return (this.$sources.first().attr('data-sign-src') === this.$sources.first().attr('src'));
+  };
 
-    // create and inject surrounding HTML structure
-    // If IOS:
-    //  If video:
-    //   IOS does not support any of the player's functionality
-    //   - everything plays in its own player
-    //   Therefore, AblePlayer is not loaded & all functionality is disabled
-    //   (this all determined. If this is IOS && video, this function is never called)
-    //  If audio:
-    //   HTML cannot be injected as a *parent* of the <audio> element
-    //   It is therefore injected *after* the <audio> element
-    //   This is only a problem in IOS 6 and earlier,
-    //   & is a known bug, fixed in IOS 7
+  AblePlayer.prototype.swapSign = function() {
+    // swap cued and non-cued source media, depending on which is playing
+    // this function is only called in two circumstances:
+    // 1. Swapping to cued version when initializing player (based on user prefs & availability)
+    // 2. User is toggling description
 
-    var thisObj, signVideoId, i, signSrc, srcType, $signSource;
+    var i, origSrc, descSrc, srcType, jwSourceIndex, newSource;
 
-    thisObj = this;
-
-    signVideoId = this.mediaId + '-sign';
-    this.$signVideo = $('<video>',{
-      'id' : signVideoId,
-      'width' : this.playerWidth,
-      'tabindex' : '-1' // remove from tab order
-    });
-    this.signVideo = this.$signVideo[0];
-    // for each original <source>, add a <source> to the sign <video>
-    for (i=0; i < this.$sources.length; i++) {
-      signSrc = this.$sources[i].getAttribute('data-sign-src');
-      srcType = this.$sources[i].getAttribute('type');
-      if (signSrc) {
-        $signSource = $('<source>',{
-          'src' : signSrc,
-          'type' : srcType
-        });
-        this.$signVideo.append($signSource);
+    if (!this.usingSign()) {
+      for (i=0; i < this.$sources.length; i++) {
+        // for all <source> elements, replace src with data-cued-src (if one exists)
+        // then store original source in a new data-orig-src attribute
+        descSrc = this.$sources[i].getAttribute('data-sign-src');
+        srcType = this.$sources[i].getAttribute('type');
+        if (descSrc) {
+          this.$sources[i].setAttribute('src',descSrc);
+        }
+        if (srcType === 'video/mp4') {
+          jwSourceIndex = i;
+        }
+      }
+      if (this.initializing) { // user hasn't pressed play yet
+        this.swappingSrc = false;
       }
       else {
-        // source is missing a sign language version
-        // can't include sign language
-        this.hasSignLanguage = false;
-        break;
+        this.swappingSrc = true;
       }
     }
-
-    this.$signWindow = $('<div>',{
-      'class' : 'able-sign-window',
-      'draggable': 'true',
-      'tabindex': '-1'
-    });
-    this.$signWindow.append(this.$signVideo).hide();
-
-    // Place sign window in div.able-column-right
-    // If div doesn't exist yet, create it
-    if (this.$ableColumnRight) {
-      this.$ableColumnRight.append(this.$signWindow);
-    }
     else {
-      this.splitPlayerIntoColumns('sign');
+      // the cued version is currently playing
+      // swap back to the original
+      for (i=0; i < this.$sources.length; i++) {
+        // for all <source> elements, replace src with data-orig-src
+        origSrc = this.$sources[i].getAttribute('data-orig-src');
+        srcType = this.$sources[i].getAttribute('type');
+        if (origSrc) {
+          this.$sources[i].setAttribute('src',origSrc);
+        }
+        if (srcType === 'video/mp4') {
+          jwSourceIndex = i;
+        }
+      }
+      // No need to check for this.initializing
+      // This function is only called during initialization
+      // if swapping from non-cued to cued
+      this.swappingSrc = true;
     }
-
-    this.initDragDrop(this.$signWindow);
+    // now reload the source file.
+    if (this.player === 'html5') {
+      this.media.load();
+    }
+    else if (this.player === 'jw' && this.jwPlayer) {
+      newSource = this.$sources[jwSourceIndex].getAttribute('src');
+      this.jwPlayer.load({file: newSource});
+    }
+    else if (this.player === 'youtube') {
+      // Can't switch youtube tracks, so do nothing.
+      // TODO: Disable open descriptions button with Youtube.
+    }
   };
 
 })(jQuery);
 
-(function ($) {
+  (function ($) {
   AblePlayer.prototype.initCued = function() {
     // set default mode for delivering description (open vs closed)
     // based on availability and user preference

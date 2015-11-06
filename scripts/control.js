@@ -495,6 +495,17 @@
       }
     }
 
+    if (this.$signButton) {
+      if (this.signOn) {
+        this.$signButton.removeClass('buttonOff').attr('aria-label',this.tt.showSign);
+        this.$signButton.find('span.able-clipped').text(this.tt.showSign);
+      }
+      else {
+        this.$signButton.addClass('buttonOff').attr('aria-label',this.tt.hideSign);
+        this.$signButton.find('span.able-clipped').text(this.tt.hideSign);
+      }
+    }
+
     if (this.$ccButton) {
       if (this.usingYouTubeCaptions) {
         var captionsCount = this.ytCaptions.length;
@@ -895,13 +906,25 @@
 
   AblePlayer.prototype.handleDescriptionToggle = function() {
     this.descOn = !this.descOn;
+    this.cuedOn = false;
+    this.signOn = false;
     this.updateDescription();
     this.refreshControls();
   };
 
   AblePlayer.prototype.handleCuedToggle = function() {
     this.cuedOn = !this.cuedOn;
+    this.descOn = false;
+    this.signOn = false;
     this.updateCued();
+    this.refreshControls();
+  };
+
+  AblePlayer.prototype.handleSignToggle = function() {
+    this.signOn = !this.signOn;
+    this.descOn = false;
+    this.cuedOn = false;
+    this.updateSign();
     this.refreshControls();
   };
 

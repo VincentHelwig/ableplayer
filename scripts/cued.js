@@ -1,4 +1,4 @@
-(function ($) {
+  (function ($) {
   AblePlayer.prototype.initCued = function() {
     // set default mode for delivering description (open vs closed)
     // based on availability and user preference
