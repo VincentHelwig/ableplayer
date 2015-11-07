@@ -96,7 +96,7 @@
       if (!this.$descDiv.is(':hidden')) {
         newHeight -= this.$descDiv.height();
       }
-      this.resizePlayer($(window).width(), newHeight);
+      this.resizePlayer($(window).width(), newHeight - 15);
     }
     else {
       this.resizePlayer(this.playerWidth, this.playerHeight);
