@@ -835,7 +835,7 @@
     i, j, controls, controllerSpan, tooltipId, tooltipDiv, tooltipX, tooltipY, control,
     buttonImg, buttonImgSrc, buttonTitle, newButton, iconClass, buttonIcon,
     leftWidth, rightWidth, totalWidth, leftWidthStyle, rightWidthStyle,
-    controllerStyles, vidcapStyles, captionLabel;
+    controllerStyles, vidcapStyles, captionLabel, groupClass;
 
     var thisObj = this;
 
@@ -859,12 +859,12 @@
       controls = controlLayout[sectionByOrder[i]];
       if ((i % 2) === 0) {
         controllerSpan = $('<span>',{
-          'class': 'able-left-controls'
+          'class': 'able-left-controls section' + parseInt(i / 2)
         });
       }
       else {
         controllerSpan = $('<span>',{
-          'class': 'able-right-controls'
+          'class': 'able-right-controls section' + parseInt(i / 2)
         });
       }
       this.$controllerDiv.append(controllerSpan);
@@ -918,11 +918,28 @@
           // This has been thoroughly tested and works well in all screen reader/browser combinations
           // See https://github.com/ableplayer/ableplayer/issues/81
 
+          switch(control) {
+              case 'captions':
+              case 'sign':
+              case 'cued':
+              case 'descriptions':
+                groupClass = ' second';
+                break;
+              case 'transcript':
+              case 'slower':
+              case 'faster':
+              case 'chapters':
+                groupClass = ' third';
+                break;
+            default:
+                groupClass = '';
+          }
+
           newButton = $('<button>',{
             'type': 'button',
             'tabindex': '0',
             'aria-label': buttonTitle,
-            'class': 'able-button-handler-' + control
+            'class': 'able-button-handler-' + control + groupClass
           });
           if (this.iconType === 'font') {
             iconClass = 'icon-' + control;
@@ -951,6 +968,7 @@
             var label = $(this).attr('aria-label');
             // get position of this button
             var position = $(this).position();
+            var marginLeft = parseInt($(this).css('marginLeft'));
             var buttonHeight = $(this).height();
             var buttonWidth = $(this).width();
             var tooltipY = position.top - buttonHeight - 15;
@@ -987,7 +1005,7 @@
               // populate tooltip, then calculate its width before showing it
               var tooltipWidth = $('#' + tooltipId).text(label).width();
               // center the tooltip horizontally over the button
-              var tooltipX = position.left - tooltipWidth/2;
+              var tooltipX = position.left + marginLeft - tooltipWidth/2;
               var tooltipStyle = {
                 left: tooltipX + 'px',
                 right: '',

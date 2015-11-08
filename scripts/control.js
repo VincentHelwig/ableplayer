@@ -593,6 +593,15 @@
       }
     }
 
+    var blankSpace = this.isFullscreen() ? $(window).width() : this.playerWidth;
+    blankSpace -= this.$controllerDiv.find('.able-right-controls.section1').width();
+    this.$controllerDiv.find('.able-left-controls.section1').children().each(function(index) {
+        blankSpace -= $(this).width();
+    });
+
+    this.$controllerDiv.find('.able-left-controls.section1 button.second:first').css('marginLeft', blankSpace/3);
+    this.$controllerDiv.find('.able-left-controls.section1 button.third:first').css('marginLeft', blankSpace/3);
+
     // TODO: Move all button updates here.
 
     if (typeof this.$bigPlayButton !== 'undefined') {
@@ -860,7 +869,7 @@
         this.closePopups();
         this.captionsPopup.show();
         this.captionsPopup.css('top', this.$ccButton.position().top - this.captionsPopup.outerHeight());
-        this.captionsPopup.css('left', this.$ccButton.position().left)
+        this.captionsPopup.css('left', this.$ccButton.position().left + parseInt(this.$ccButton.css('marginLeft')));
         // Focus on the checked button, if any buttons are checked
         // Otherwise, focus on the first button
         this.captionsPopup.find('li').removeClass('able-focus');
