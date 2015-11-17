@@ -804,7 +804,7 @@
     // Include the pipe only if we need to.
     if (bll.length > 0 && blr.length > 0) {
       controlLayout['bl'] = bll;
-      controlLayout['bl'].push('pipe');
+      // cdcontrolLayout['bl'].push('pipe');
       controlLayout['bl'] = controlLayout['bl'].concat(blr);
     }
     else {
