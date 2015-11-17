@@ -278,11 +278,6 @@
         this.handleDescriptionToggle();
       }
     }
-    else if (which === 108) { // l = cued speech
-      if (this.usingModifierKeys(e)) {
-        this.handleCuedToggle();
-      }
-    }
     else if (which === 104) { // h = help
       if (this.usingModifierKeys(e)) {
         this.handleHelpClick();

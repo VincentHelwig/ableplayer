@@ -3072,15 +3072,6 @@
         }
         key = 'c';
       }
-      else if (this.controls[i] === 'cued') {
-        if (this.cuedOn) {
-          label = this.tt.turnOffCued;
-        }
-        else {
-          label = this.tt.turnOnCued;
-        }
-        key = 'l';
-      }
       else if (this.controls[i] === 'descriptions') {
         if (this.descOn) {
           label = this.tt.turnOffDescriptions;
@@ -6959,11 +6950,6 @@
     else if (which === 110) { // n = narration (description)
       if (this.usingModifierKeys(e)) {
         this.handleDescriptionToggle();
-      }
-    }
-    else if (which === 108) { // l = cued speech
-      if (this.usingModifierKeys(e)) {
-        this.handleCuedToggle();
       }
     }
     else if (which === 104) { // h = help

@@ -675,15 +675,6 @@
         }
         key = 'c';
       }
-      else if (this.controls[i] === 'cued') {
-        if (this.cuedOn) {
-          label = this.tt.turnOffCued;
-        }
-        else {
-          label = this.tt.turnOnCued;
-        }
-        key = 'l';
-      }
       else if (this.controls[i] === 'descriptions') {
         if (this.descOn) {
           label = this.tt.turnOffDescriptions;
