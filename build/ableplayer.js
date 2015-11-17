@@ -5307,6 +5307,15 @@
       }
     }
 
+    if (this.$transcriptDiv.is(':visible')) {
+      this.$transcriptButton.removeClass('buttonOff').attr('aria-label',this.tt.hideTranscript);
+      this.$transcriptButton.find('span.able-clipped').text(this.tt.hideTranscript);
+    }
+    else {
+    this.$transcriptButton.addClass('buttonOff').attr('aria-label',this.tt.showTranscript);
+    this.$transcriptButton.find('span.able-clipped').text(this.tt.showTranscript);
+    }
+
     if (this.$ccButton) {
       if (this.usingYouTubeCaptions) {
         var captionsCount = this.ytCaptions.length;
