@@ -6750,6 +6750,8 @@
       // new source file has just been loaded
       // should be able to play
 
+      this.seekTo(0);
+
       if (this.player === 'jw') {
         var player = this.jwPlayer;
         // Seems to be a bug in JW player, where this doesn't work when fired immediately.
