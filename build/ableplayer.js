@@ -3424,12 +3424,12 @@
               // user prefer non-audio described version
               // Therefore, load media without description
               // Description can be toggled on later with this button
-              newButton.addClass('buttonOff').attr('title',this.tt.turnOnDescriptions);
+              newButton.addClass('buttonOff');
             }
           }
           else if (control === 'cued') {
             if (!this.prefCued || this.prefCued !== 1) {
-              newButton.addClass('buttonOff').attr('title',this.tt.turnOnCued);
+              newButton.addClass('buttonOff');
             }
           }
 
@@ -3448,14 +3448,14 @@
             this.$cuedButton = newButton;
             // gray out description button if description is not active
             if (!this.cuedOn) {
-              this.$cuedButton.addClass('buttonOff').attr('title',this.tt.turnOnCued);
+              this.$cuedButton.addClass('buttonOff');
             }
           }
           else if (control === 'descriptions') {
             this.$descButton = newButton;
             // gray out description button if description is not active
             if (!this.descOn) {
-              this.$descButton.addClass('buttonOff').attr('title',this.tt.turnOnDescriptions);
+              this.$descButton.addClass('buttonOff');
             }
           }
           else if (control === 'mute') {
