@@ -74,8 +74,8 @@
             'label': this.tt.prefSignLanguage,
             'value': 2
         }, {
-            'name': 'prefCued',
-            'label': this.tt.prefCued,
+            'name': 'prefTranslateVideo',
+            'label': this.tt.prefTranslateVideo,
             'value': 3
         }]
       });

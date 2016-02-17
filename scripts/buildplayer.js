@@ -770,8 +770,8 @@
       if (this.hasSignLanguage) {
         blr.push('sign'); // sign language
       }
-      if (this.hasOpenCued) {
-        blr.push('cued'); // cued speech
+      if (this.hasOpenTranslate) {
+        blr.push('translate'); // translated
       }
       if (this.hasOpenDesc || this.hasClosedDesc) {
         blr.push('descriptions'); //audio description
@@ -912,7 +912,7 @@
           switch(control) {
               case 'captions':
               case 'sign':
-              case 'cued':
+              case 'translate':
               case 'descriptions':
                 groupClass = ' second';
                 break;
@@ -1030,8 +1030,8 @@
               newButton.addClass('buttonOff');
             }
           }
-          else if (control === 'cued') {
-            if (!this.prefCued || this.prefCued !== 1) {
+          else if (control === 'translate') {
+            if (!this.prefTranslateVideo || this.prefTranslateVideo !== 1) {
               newButton.addClass('buttonOff');
             }
           }
@@ -1047,11 +1047,11 @@
           else if (control === 'sign') {
             this.$signButton = newButton;
           }
-          else if (control === 'cued') {
-            this.$cuedButton = newButton;
+          else if (control === 'translate') {
+            this.$translateButton = newButton;
             // gray out description button if description is not active
-            if (!this.cuedOn) {
-              this.$cuedButton.addClass('buttonOff');
+            if (!this.translateOn) {
+              this.$translateButton.addClass('buttonOff');
             }
           }
           else if (control === 'descriptions') {
@@ -1260,12 +1260,12 @@
         }
       }
     }
-    else if (control === 'cued') {
-      if (this.cuedOn) {
-        return this.tt.turnOffCued;
+    else if (control === 'translate') {
+      if (this.translateOn) {
+        return this.tt.turnOffTranslateVideo;
       }
       else {
-        return this.tt.turnOnCued;
+        return this.tt.turnOnTranslateVideo;
       }
     }
     else if (control === 'descriptions') {

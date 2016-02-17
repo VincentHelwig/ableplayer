@@ -1,5 +1,5 @@
   (function ($) {
-  AblePlayer.prototype.initCued = function() {
+  AblePlayer.prototype.initTranslate = function() {
     // set default mode for delivering description (open vs closed)
     // based on availability and user preference
 
@@ -7,59 +7,59 @@
     // checks only the first source
     // Therefore, if a described version is provided,
     // it must be provided for all sources
-    this.cuedFile = this.$sources.first().attr('data-cued-src');
-    if (this.cuedFile) {
+    this.translateFile = this.$sources.first().attr('data-translate-src');
+    if (this.translateFile) {
       if (this.debug) {
-        console.log('This video has a cued speech version: ' + this.cuedFile);
+        console.log('This video has a translated version: ' + this.translateFile);
       }
-      this.hasOpenCued = true;
+      this.hasOpenTranslate = true;
       if (this.prefVideo === 3) {
-        this.cuedOn = true;
+        this.translateOn = true;
       }
     }
     else {
       if (this.debug) {
-        console.log('This video does not have a cued speech version');
+        console.log('This video does not have a translated version');
       }
-      this.hasOpenCued = false;
+      this.hasOpenTranslate = false;
     }
 
-    this.updateCued();
+    this.updateTranslate();
   };
 
-  AblePlayer.prototype.updateCued = function (time) {
-    var useCuedSpeech;
+  AblePlayer.prototype.updateTranslate = function (time) {
+    var useTranslate;
 
-    if (this.cuedOn) {
-      useCuedSpeech = true;
+    if (this.translateOn) {
+      useTranslate = true;
     }
     else {
-      useCuedSpeech = false;
+      useTranslate = false;
     }
 
-    if (this.hasOpenCued && this.usingCuedSpeech() !== useCuedSpeech) {
-      this.swapCued();
+    if (this.hasOpenTranslate && this.usingTranslate() !== useTranslate) {
+      this.swapTranslate();
     }
   };
 
-  // Returns true if currently using cued speech, false otherwise.
-  AblePlayer.prototype.usingCuedSpeech = function () {
-    return (this.$sources.first().attr('data-cued-src') === this.$sources.first().attr('src'));
+  // Returns true if currently using translated, false otherwise.
+  AblePlayer.prototype.usingTranslate = function () {
+    return (this.$sources.first().attr('data-translate-src') === this.$sources.first().attr('src'));
   };
 
-  AblePlayer.prototype.swapCued = function() {
-    // swap cued and non-cued source media, depending on which is playing
+  AblePlayer.prototype.swapTranslate = function() {
+    // swap translated and non-translated source media, depending on which is playing
     // this function is only called in two circumstances:
-    // 1. Swapping to cued version when initializing player (based on user prefs & availability)
+    // 1. Swapping to translated version when initializing player (based on user prefs & availability)
     // 2. User is toggling description
 
     var i, origSrc, descSrc, srcType, jwSourceIndex, newSource;
 
-    if (!this.usingCuedSpeech()) {
+    if (!this.usingTranslate()) {
       for (i=0; i < this.$sources.length; i++) {
-        // for all <source> elements, replace src with data-cued-src (if one exists)
+        // for all <source> elements, replace src with data-translate-src (if one exists)
         // then store original source in a new data-orig-src attribute
-        descSrc = this.$sources[i].getAttribute('data-cued-src');
+        descSrc = this.$sources[i].getAttribute('data-translate-src');
         srcType = this.$sources[i].getAttribute('type');
         if (descSrc) {
           this.$sources[i].setAttribute('src',descSrc);
@@ -76,7 +76,7 @@
       }
     }
     else {
-      // the cued version is currently playing
+      // the translated version is currently playing
       // swap back to the original
       for (i=0; i < this.$sources.length; i++) {
         // for all <source> elements, replace src with data-orig-src
@@ -91,7 +91,7 @@
       }
       // No need to check for this.initializing
       // This function is only called during initialization
-      // if swapping from non-cued to cued
+      // if swapping from non-translated to translated
       this.swappingSrc = true;
     }
     // now reload the source file.

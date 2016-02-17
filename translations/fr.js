@@ -66,11 +66,11 @@
 
 
 
-"turnOnCued": "English on",
+"turnOnTranslateVideo": "English on",
 
 
 
-"turnOffCued": "Engligh Off",
+"turnOffTranslateVideo": "English Off",
 
 
 
@@ -266,7 +266,7 @@
 
 
 
-"prefCued": "Vidéo principale en anglais",
+"prefTranslateVideo": "Vidéo principale en anglais",
 
 
 
