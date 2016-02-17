@@ -66,11 +66,11 @@
 
 
 
-"turnOnCued": "Activer LPC",
+"turnOnCued": "English on",
 
 
 
-"turnOffCued": "Désactiver LPC",
+"turnOffCued": "Engligh Off",
 
 
 
@@ -266,7 +266,7 @@
 
 
 
-"prefCued": "Vidéo principale avec LPC",
+"prefCued": "Vidéo principale en anglais",
 
 
 
