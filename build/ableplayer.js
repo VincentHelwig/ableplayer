@@ -3929,7 +3929,7 @@
   AblePlayer.prototype.setupChapters = function (track, cues) {
     // NOTE: WebVTT supports nested timestamps (to form an outline)
     // This is not currently supported.
-    this.hasChapters = true;
+    this.hasChapters = false;
     this.chapters = cues;
   };
 
