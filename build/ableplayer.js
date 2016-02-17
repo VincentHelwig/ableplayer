@@ -3167,11 +3167,11 @@
       if (this.hasSignLanguage) {
         blr.push('sign'); // sign language
       }
-      if (this.hasOpenTranslate) {
-        blr.push('translate'); // translated
-      }
       if (this.hasOpenDesc || this.hasClosedDesc) {
         blr.push('descriptions'); //audio description
+      }
+      if (this.hasOpenTranslate) {
+        blr.push('translate'); // translated
       }
     }
 
