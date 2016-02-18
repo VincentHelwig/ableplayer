@@ -332,6 +332,7 @@
     if (numChanges > 0) {
       this.setCookie(cookie);
       this.showAlert(this.tt.prefSuccess);
+      window.location.reload();
     }
     else {
       this.showAlert(this.tt.prefNoChange);
