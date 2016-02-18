@@ -169,8 +169,8 @@
     else if (whichButton === 'descriptions') {
       this.handleDescriptionToggle();
     }
-    else if (whichButton === 'cued') {
-      this.handleCuedToggle();
+    else if (whichButton === 'translate') {
+      this.handleTranslateToggle();
     }
     else if (whichButton === 'sign') {
       this.handleSignToggle();

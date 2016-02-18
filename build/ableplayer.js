@@ -577,7 +577,7 @@
     this.initSignLanguage();
     this.setupTracks().then(function () {
       thisObj.setupPopups();
-      thisObj.initCued();
+      thisObj.initTranslate();
       thisObj.initDescription();
       thisObj.updateDescription();
       thisObj.initializing = false;
@@ -1363,8 +1363,8 @@
             'label': this.tt.prefSignLanguage,
             'value': 2
         }, {
-            'name': 'prefCued',
-            'label': this.tt.prefCued,
+            'name': 'prefTranslateVideo',
+            'label': this.tt.prefTranslateVideo,
             'value': 3
         }]
       });
@@ -1621,6 +1621,7 @@
     if (numChanges > 0) {
       this.setCookie(cookie);
       this.showAlert(this.tt.prefSuccess);
+      window.location.reload();
     }
     else {
       this.showAlert(this.tt.prefNoChange);
@@ -3167,11 +3168,11 @@
       if (this.hasSignLanguage) {
         blr.push('sign'); // sign language
       }
-      if (this.hasOpenCued) {
-        blr.push('cued'); // cued speech
-      }
       if (this.hasOpenDesc || this.hasClosedDesc) {
         blr.push('descriptions'); //audio description
+      }
+      if (this.hasOpenTranslate) {
+        blr.push('translate'); // translated
       }
     }
 
@@ -3309,7 +3310,7 @@
           switch(control) {
               case 'captions':
               case 'sign':
-              case 'cued':
+              case 'translate':
               case 'descriptions':
                 groupClass = ' second';
                 break;
@@ -3427,8 +3428,8 @@
               newButton.addClass('buttonOff');
             }
           }
-          else if (control === 'cued') {
-            if (!this.prefCued || this.prefCued !== 1) {
+          else if (control === 'translate') {
+            if (!this.prefTranslateVideo || this.prefTranslateVideo !== 1) {
               newButton.addClass('buttonOff');
             }
           }
@@ -3444,11 +3445,11 @@
           else if (control === 'sign') {
             this.$signButton = newButton;
           }
-          else if (control === 'cued') {
-            this.$cuedButton = newButton;
+          else if (control === 'translate') {
+            this.$translateButton = newButton;
             // gray out description button if description is not active
-            if (!this.cuedOn) {
-              this.$cuedButton.addClass('buttonOff');
+            if (!this.translateOn) {
+              this.$translateButton.addClass('buttonOff');
             }
           }
           else if (control === 'descriptions') {
@@ -3657,12 +3658,12 @@
         }
       }
     }
-    else if (control === 'cued') {
-      if (this.cuedOn) {
-        return this.tt.turnOffCued;
+    else if (control === 'translate') {
+      if (this.translateOn) {
+        return this.tt.turnOffTranslateVideo;
       }
       else {
-        return this.tt.turnOnCued;
+        return this.tt.turnOnTranslateVideo;
       }
     }
     else if (control === 'descriptions') {
@@ -3929,7 +3930,7 @@
   AblePlayer.prototype.setupChapters = function (track, cues) {
     // NOTE: WebVTT supports nested timestamps (to form an outline)
     // This is not currently supported.
-    this.hasChapters = true;
+    this.hasChapters = false;
     this.chapters = cues;
   };
 
@@ -5276,14 +5277,14 @@
       }
     }
 
-    if (this.$cuedButton) {
-      if (this.cuedOn) {
-        this.$cuedButton.removeClass('buttonOff').attr('aria-label',this.tt.turnOffCued);
-        this.$cuedButton.find('span.able-clipped').text(this.tt.turnOffCued);
+    if (this.$translateButton) {
+      if (this.translateOn) {
+        this.$translateButton.removeClass('buttonOff').attr('aria-label',this.tt.turnOffTranslateVideo);
+        this.$translateButton.find('span.able-clipped').text(this.tt.turnOffTranslateVideo);
       }
       else {
-        this.$cuedButton.addClass('buttonOff').attr('aria-label',this.tt.turnOnCued);
-        this.$cuedButton.find('span.able-clipped').text(this.tt.turnOnCued);
+        this.$translateButton.addClass('buttonOff').attr('aria-label',this.tt.turnOnTranslateVideo);
+        this.$translateButton.find('span.able-clipped').text(this.tt.turnOnTranslateVideo);
       }
     }
 
@@ -5716,24 +5717,24 @@
 
   AblePlayer.prototype.handleDescriptionToggle = function() {
     this.descOn = !this.descOn;
-    this.cuedOn = false;
+    this.translateOn = false;
     this.signOn = false;
     this.updateDescription();
     this.refreshControls();
   };
 
-  AblePlayer.prototype.handleCuedToggle = function() {
-    this.cuedOn = !this.cuedOn;
+  AblePlayer.prototype.handleTranslateToggle = function() {
+    this.translateOn = !this.translateOn;
     this.descOn = false;
     this.signOn = false;
-    this.updateCued();
+    this.updateTranslate();
     this.refreshControls();
   };
 
   AblePlayer.prototype.handleSignToggle = function() {
     this.signOn = !this.signOn;
     this.descOn = false;
-    this.cuedOn = false;
+    this.translateOn = false;
     this.updateSign();
     this.refreshControls();
   };
@@ -6843,8 +6844,8 @@
     else if (whichButton === 'descriptions') {
       this.handleDescriptionToggle();
     }
-    else if (whichButton === 'cued') {
-      this.handleCuedToggle();
+    else if (whichButton === 'translate') {
+      this.handleTranslateToggle();
     }
     else if (whichButton === 'sign') {
       this.handleSignToggle();
@@ -7631,7 +7632,7 @@
     this.signFile = this.$sources.first().attr('data-sign-src');
     if (this.signFile) {
       if (this.debug) {
-        console.log('This video has a sign language version: ' + this.cuedFile);
+        console.log('This video has a sign language version: ' + this.translateFile);
       }
       this.hasSignLanguage = true;
       if (this.prefVideo === 2) {
@@ -7678,7 +7679,7 @@
 
     if (!this.usingSign()) {
       for (i=0; i < this.$sources.length; i++) {
-        // for all <source> elements, replace src with data-cued-src (if one exists)
+        // for all <source> elements, replace src with data-translate-src (if one exists)
         // then store original source in a new data-orig-src attribute
         descSrc = this.$sources[i].getAttribute('data-sign-src');
         srcType = this.$sources[i].getAttribute('type');
@@ -7732,7 +7733,7 @@
 })(jQuery);
 
   (function ($) {
-  AblePlayer.prototype.initCued = function() {
+  AblePlayer.prototype.initTranslate = function() {
     // set default mode for delivering description (open vs closed)
     // based on availability and user preference
 
@@ -7740,59 +7741,59 @@
     // checks only the first source
     // Therefore, if a described version is provided,
     // it must be provided for all sources
-    this.cuedFile = this.$sources.first().attr('data-cued-src');
-    if (this.cuedFile) {
+    this.translateFile = this.$sources.first().attr('data-translate-src');
+    if (this.translateFile) {
       if (this.debug) {
-        console.log('This video has a cued speech version: ' + this.cuedFile);
+        console.log('This video has a translated version: ' + this.translateFile);
       }
-      this.hasOpenCued = true;
+      this.hasOpenTranslate = true;
       if (this.prefVideo === 3) {
-        this.cuedOn = true;
+        this.translateOn = true;
       }
     }
     else {
       if (this.debug) {
-        console.log('This video does not have a cued speech version');
+        console.log('This video does not have a translated version');
       }
-      this.hasOpenCued = false;
+      this.hasOpenTranslate = false;
     }
 
-    this.updateCued();
+    this.updateTranslate();
   };
 
-  AblePlayer.prototype.updateCued = function (time) {
-    var useCuedSpeech;
+  AblePlayer.prototype.updateTranslate = function (time) {
+    var useTranslate;
 
-    if (this.cuedOn) {
-      useCuedSpeech = true;
+    if (this.translateOn) {
+      useTranslate = true;
     }
     else {
-      useCuedSpeech = false;
+      useTranslate = false;
     }
 
-    if (this.hasOpenCued && this.usingCuedSpeech() !== useCuedSpeech) {
-      this.swapCued();
+    if (this.hasOpenTranslate && this.usingTranslate() !== useTranslate) {
+      this.swapTranslate();
     }
   };
 
-  // Returns true if currently using cued speech, false otherwise.
-  AblePlayer.prototype.usingCuedSpeech = function () {
-    return (this.$sources.first().attr('data-cued-src') === this.$sources.first().attr('src'));
+  // Returns true if currently using translated, false otherwise.
+  AblePlayer.prototype.usingTranslate = function () {
+    return (this.$sources.first().attr('data-translate-src') === this.$sources.first().attr('src'));
   };
 
-  AblePlayer.prototype.swapCued = function() {
-    // swap cued and non-cued source media, depending on which is playing
+  AblePlayer.prototype.swapTranslate = function() {
+    // swap translated and non-translated source media, depending on which is playing
     // this function is only called in two circumstances:
-    // 1. Swapping to cued version when initializing player (based on user prefs & availability)
+    // 1. Swapping to translated version when initializing player (based on user prefs & availability)
     // 2. User is toggling description
 
     var i, origSrc, descSrc, srcType, jwSourceIndex, newSource;
 
-    if (!this.usingCuedSpeech()) {
+    if (!this.usingTranslate()) {
       for (i=0; i < this.$sources.length; i++) {
-        // for all <source> elements, replace src with data-cued-src (if one exists)
+        // for all <source> elements, replace src with data-translate-src (if one exists)
         // then store original source in a new data-orig-src attribute
-        descSrc = this.$sources[i].getAttribute('data-cued-src');
+        descSrc = this.$sources[i].getAttribute('data-translate-src');
         srcType = this.$sources[i].getAttribute('type');
         if (descSrc) {
           this.$sources[i].setAttribute('src',descSrc);
@@ -7809,7 +7810,7 @@
       }
     }
     else {
-      // the cued version is currently playing
+      // the translated version is currently playing
       // swap back to the original
       for (i=0; i < this.$sources.length; i++) {
         // for all <source> elements, replace src with data-orig-src
@@ -7824,7 +7825,7 @@
       }
       // No need to check for this.initializing
       // This function is only called during initialization
-      // if swapping from non-cued to cued
+      // if swapping from non-translated to translated
       this.swappingSrc = true;
     }
     // now reload the source file.

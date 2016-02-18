@@ -10,7 +10,7 @@
     this.signFile = this.$sources.first().attr('data-sign-src');
     if (this.signFile) {
       if (this.debug) {
-        console.log('This video has a sign language version: ' + this.cuedFile);
+        console.log('This video has a sign language version: ' + this.translateFile);
       }
       this.hasSignLanguage = true;
       if (this.prefVideo === 2) {
@@ -57,7 +57,7 @@
 
     if (!this.usingSign()) {
       for (i=0; i < this.$sources.length; i++) {
-        // for all <source> elements, replace src with data-cued-src (if one exists)
+        // for all <source> elements, replace src with data-translate-src (if one exists)
         // then store original source in a new data-orig-src attribute
         descSrc = this.$sources[i].getAttribute('data-sign-src');
         srcType = this.$sources[i].getAttribute('type');

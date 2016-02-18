@@ -484,14 +484,14 @@
       }
     }
 
-    if (this.$cuedButton) {
-      if (this.cuedOn) {
-        this.$cuedButton.removeClass('buttonOff').attr('aria-label',this.tt.turnOffCued);
-        this.$cuedButton.find('span.able-clipped').text(this.tt.turnOffCued);
+    if (this.$translateButton) {
+      if (this.translateOn) {
+        this.$translateButton.removeClass('buttonOff').attr('aria-label',this.tt.turnOffTranslateVideo);
+        this.$translateButton.find('span.able-clipped').text(this.tt.turnOffTranslateVideo);
       }
       else {
-        this.$cuedButton.addClass('buttonOff').attr('aria-label',this.tt.turnOnCued);
-        this.$cuedButton.find('span.able-clipped').text(this.tt.turnOnCued);
+        this.$translateButton.addClass('buttonOff').attr('aria-label',this.tt.turnOnTranslateVideo);
+        this.$translateButton.find('span.able-clipped').text(this.tt.turnOnTranslateVideo);
       }
     }
 
@@ -924,24 +924,24 @@
 
   AblePlayer.prototype.handleDescriptionToggle = function() {
     this.descOn = !this.descOn;
-    this.cuedOn = false;
+    this.translateOn = false;
     this.signOn = false;
     this.updateDescription();
     this.refreshControls();
   };
 
-  AblePlayer.prototype.handleCuedToggle = function() {
-    this.cuedOn = !this.cuedOn;
+  AblePlayer.prototype.handleTranslateToggle = function() {
+    this.translateOn = !this.translateOn;
     this.descOn = false;
     this.signOn = false;
-    this.updateCued();
+    this.updateTranslate();
     this.refreshControls();
   };
 
   AblePlayer.prototype.handleSignToggle = function() {
     this.signOn = !this.signOn;
     this.descOn = false;
-    this.cuedOn = false;
+    this.translateOn = false;
     this.updateSign();
     this.refreshControls();
   };

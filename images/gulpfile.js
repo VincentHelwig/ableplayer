@@ -6,10 +6,10 @@ var gulp = require('gulp');
 var iconfont = require('gulp-iconfont');
 
 gulp.task('svgfont', function(){
-  return gulp.src(['images/*.svg'])
+  return gulp.src(['svg/*.svg'])
     .pipe(iconfont({
       fontName: 'able', // required
-      appendUnicode: true, // recommended option
+      prependUnicode: true, // recommended option
       normalize: true,
       fontHeight: 1001,
       formats: ['ttf', 'eot', 'woff'], // default, 'woff2' and 'svg' are available

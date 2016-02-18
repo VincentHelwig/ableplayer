@@ -329,7 +329,7 @@
     this.initSignLanguage();
     this.setupTracks().then(function () {
       thisObj.setupPopups();
-      thisObj.initCued();
+      thisObj.initTranslate();
       thisObj.initDescription();
       thisObj.updateDescription();
       thisObj.initializing = false;

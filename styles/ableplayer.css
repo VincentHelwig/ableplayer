@@ -57,9 +57,9 @@
 }
 .able-controller {
 	position: relative;
-	border-top: 2px solid #4c4c4c;
-	border-bottom: 2px solid #4c4c4c;
-	background-color: #464646; /* background color of controller bar */
+	border-top: 2px solid #fff;
+	border-bottom: 2px solid #fff;
+	background-color: #000; /* background color of controller bar */
 	min-height: 38px; /* height of button (20px) + 4px border + 4px padding */
 	padding: 0;
 }
@@ -486,7 +486,7 @@ div.modalDialog button:focus {
 	content: "\EA02";
 }
 .icon-captions:before {
-	content: "\EA05";
+	content: "\EA0A";
 }
 .icon-descriptions:before {
 	content: "\EA01";
@@ -539,8 +539,8 @@ div.modalDialog button:focus {
 .icon-sign:before {
 	content: "\EA11";
 }
-.icon-cued:before {
-	content: "\EA25";
+.icon-translate:before {
+	content: "\EA0B";
 }
 
 /*

@@ -74,8 +74,8 @@
             'label': this.tt.prefSignLanguage,
             'value': 2
         }, {
-            'name': 'prefCued',
-            'label': this.tt.prefCued,
+            'name': 'prefTranslateVideo',
+            'label': this.tt.prefTranslateVideo,
             'value': 3
         }]
       });
@@ -332,6 +332,7 @@
     if (numChanges > 0) {
       this.setCookie(cookie);
       this.showAlert(this.tt.prefSuccess);
+      window.location.reload();
     }
     else {
       this.showAlert(this.tt.prefNoChange);
