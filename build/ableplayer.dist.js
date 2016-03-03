@@ -5088,8 +5088,6 @@
 
   AblePlayer.prototype.playMedia = function () {
     if (this.player === 'html5') {
-      this.media.load();
-
       this.media.play(true);
       if (this.hasSignLanguage && this.signVideo) {
         this.signVideo.play(true);
