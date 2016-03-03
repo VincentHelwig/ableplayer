@@ -7787,16 +7787,16 @@
     // 1. Swapping to translated version when initializing player (based on user prefs & availability)
     // 2. User is toggling description
 
-    var i, origSrc, descSrc, srcType, jwSourceIndex, newSource;
+    var i, origSrc, translateSrc, srcType, jwSourceIndex, newSource;
 
     if (!this.usingTranslate()) {
       for (i=0; i < this.$sources.length; i++) {
         // for all <source> elements, replace src with data-translate-src (if one exists)
         // then store original source in a new data-orig-src attribute
-        descSrc = this.$sources[i].getAttribute('data-translate-src');
+        translateSrc = this.$sources[i].getAttribute('data-translate-src');
         srcType = this.$sources[i].getAttribute('type');
-        if (descSrc) {
-          this.$sources[i].setAttribute('src',descSrc);
+        if (translateSrc) {
+          this.$sources[i].setAttribute('src',translateSrc);
         }
         if (srcType === 'video/mp4') {
           jwSourceIndex = i;
