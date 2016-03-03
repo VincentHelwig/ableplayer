@@ -78,7 +78,10 @@
         }, 500);
       }
       else {
-        this.playMedia();
+        var thisObj = this;
+        setTimeout(function () {
+          thisObj.playMedia();
+        }, 500);
       }
       this.swappingSrc = false; // swapping is finished
       this.startedPlaying = false;
