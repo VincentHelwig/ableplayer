@@ -61,7 +61,7 @@
 	border-bottom: 2px solid #fff;
 	background-color: #000; /* background color of controller bar */
 	min-height: 38px; /* height of button (20px) + 4px border + 4px padding */
-	padding: 0;
+	padding: 5px 0 2px;
 }
 
 /* Controller Buttons & Controls */
@@ -214,6 +214,10 @@
 	float: right;
 	width: 32%;
 	text-align :right;
+}
+
+.able-controller .section1 button {
+  padding: 2px 0 0;
 }
 
 /*
